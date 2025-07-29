@@ -2,7 +2,7 @@
 const bcrypt = require('bcryptjs');
 
 // Importa o modelo User, representando a tabela de usuários no banco
-const User = require('../models/Users');
+const User = require('../models/users');
 
 // Função para criar um novo usuário
 exports.createUser = async (req, res) => {
