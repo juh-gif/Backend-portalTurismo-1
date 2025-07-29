@@ -1,43 +1,43 @@
-// Importa o tipo de dados do Sequelize
+// Importa o tipo de dados do Sequelize para definir os tipos das colunas
 const { DataTypes } = require('sequelize');
 
-// Importa a instância configurada do Sequelize (conexão com o banco de dados)
+// Importa a instância do Sequelize configurada para conexão com o banco
 const sequelize = require('../config/db');
 
-// Define o modelo de Usuário (User)
+// Define o modelo 'Contact' que representa a tabela 'contacts' no banco de dados
 const Contact = sequelize.define('Contact', {
-  // Campo ID: chave primária, número inteiro e autoincrementável
+  // Campo 'id': chave primária, inteiro autoincrementável
   id: {
-    type: DataTypes.INTEGER,       // Tipo número inteiro
-    autoIncrement: true,           // Será incrementado automaticamente
-    primaryKey: true,              // Define como chave primária (PK)
+    type: DataTypes.INTEGER,    // Tipo inteiro
+    autoIncrement: true,        // Incrementa automaticamente a cada novo registro
+    primaryKey: true,           // Define como chave primária da tabela
   },
 
-  // Campo nome do usuário
+  // Campo 'name': nome do contato
   name: {
-    type: DataTypes.STRING,        // Texto simples
-    allowNull: false,              // Campo obrigatório (não pode ser nulo)
+    type: DataTypes.STRING,     // Texto curto (string)
+    allowNull: false,           // Campo obrigatório (não pode ser nulo)
   },
 
-  // Campo e-mail do usuário
+  // Campo 'email': e-mail do contato
   email: {
-    type: DataTypes.TEXT,        // Texto simples
-    allowNull: false,              // Obrigatório
+    type: DataTypes.STRING,     // Texto curto (string) - geralmente melhor usar STRING para e-mail
+    allowNull: false,           // Campo obrigatório
   },
 
-  // Campo senha do usuário
+  // Campo 'message': mensagem enviada pelo contato
   message: {
-    type: DataTypes.STRING,        // A senha será armazenada como string (hash)
-    allowNull: false,              // Campo obrigatório
+    type: DataTypes.TEXT,       // Texto mais longo, adequado para mensagens
+    allowNull: false,           // Campo obrigatório
   }
 
 }, {
-  // Configurações adicionais do modelo
+  // Configurações do modelo
 
-  tableName: 'contacts',              // Nome da tabela no banco de dados (evita plural automático)
+  tableName: 'contacts',       // Define o nome da tabela no banco, evita pluralização automática
 
-  timestamps: true,                // Cria automaticamente os campos createdAt e updatedAt
+  timestamps: true,            // Cria automaticamente campos createdAt e updatedAt para controle de datas
 });
 
-// Exporta o modelo para ser utilizado em outras partes da aplicação
+// Exporta o modelo Contact para uso em outras partes do sistema (controllers, serviços, etc.)
 module.exports = Contact;

@@ -1,36 +1,65 @@
-// Importa a instância do Sequelize configurada e o modelo de usuário
-const sequelize = require('./config/db');
+// Carrega as variáveis de ambiente definidas no arquivo .env
 require('dotenv').config();
-const express = require('express')
- 
+
+// Importa o framework Express para criar a aplicação web/API
+const express = require('express');
+
+// Importa a instância do Sequelize configurada para conexão com o banco MySQL
+const sequelize = require('./config/db');
+
+// Importa o middleware CORS para configurar permissões de acesso entre domínios
 const cors = require('cors');
- 
+
+// Importa as rotas modularizadas da aplicação
 const userRoutes = require('./routes/userRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const authRoutes = require('./routes/authRoutes');
+
+// Cria uma instância do app Express
 const app = express();
- 
-app.use(cors({
-  origin: 'http://localhost:5173',
+
+// Configura o middleware CORS para aceitar requisições do frontend (localhost:5173)
+// Permite os métodos GET, POST, PUT, DELETE e aceita credenciais (cookies, auth headers)
+app.use(cors({                            
+  origin: 'http://localhost:5173',         
   methods: ['GET','POST','PUT','DELETE'],
   credentials: true
-}));
- 
+}));  
+
+// Middleware que transforma o corpo das requisições com JSON em objeto JavaScript acessível via req.body
 app.use(express.json());
- 
-app.get('/', (req, res)=> res.send('api funcionando'))
- 
-app.use('/api/users', userRoutes)
- app.use('/api/contact' , contactRoutes)
+
+// Rota base da API para teste rápido — retorna texto simples confirmando que API está funcionando
+app.get('/', (req, res) => res.send('API funcionando'));
+
+// Configuração das rotas da API:
+// Toda requisição para /api/users será encaminhada para userRoutes
+app.use('/api/users', userRoutes);
+
+// Toda requisição para /api/contacts será encaminhada para contactRoutes
+app.use('/api/contacts', contactRoutes);
+
+// Toda requisição para /api/auth será encaminhada para authRoutes
+app.use('/api/auth', authRoutes);
+
+// Porta definida no arquivo .env onde o servidor vai escutar as requisições
 const PORT = process.env.PORT;
- 
+
+// Primeiro tenta conectar ao banco de dados MySQL usando Sequelize
 sequelize.authenticate()
   .then(() => {
-    console.log('servidor online e conectado com o DB')
+    console.log('🟢 Conectado ao banco MySQL!');
+
+    // Sincroniza os modelos Sequelize com o banco (cria tabelas, etc)
     return sequelize.sync();
   })
-  .then(() =>{
-    console.log('banco de dados sincronizado')
-    app.listen(PORT, () => console.log("SERVIDOR RODANDO NA PORTA: " + PORT))
-  }).catch(erro => console.log("Erro interno do servidor", erro))
- 
+  .then(() => {
+    console.log('✅ Modelos sincronizados!');
+
+    // Inicia o servidor Express na porta definida
+    app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
+  })
+  .catch(err => 
+    // Caso ocorra erro na conexão ou sincronização, exibe no console
+    console.error('🔴 Erro ao conectar/sincronizar:', err)
+  );
