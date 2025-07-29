@@ -1,5 +1,5 @@
 // Importa o modelo Contact que representa a tabela de contatos no banco de dados
-const Contact = require('../models/Contacts');
+const Contact = require('../models/contacts');
 
 // Função para criar e listar todos os contatos (aparentemente o nome e funcionalidade estão trocados)
 exports.createContact = async (_req, res) => {
