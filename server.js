@@ -21,7 +21,7 @@ app.use(express.json());
 app.get('/', (req, res)=> res.send('api funcionando'))
  
 app.use('/api/users', userRoutes)
-app.use('/api/login', authRoutes)
+app.use('/api/auth', authRoutes)
  app.use('/api/contact' , contactRoutes)
 const PORT = process.env.PORT;
  
